@@ -1,0 +1,47 @@
+Data Visualization Lecture Plot
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(dslabs)
+library(ggthemes)
+library(ggrepel)
+```
+
+
+```{r}
+data(murders)
+head(murders)
+```
+
+```{r}
+r <- murders %>%
+	summarize(murder_rate = sum(total) / sum(population) * 10^6) %>%
+	.$murder_rate
+r
+```
+
+```{r}
+murders %>% ggplot(aes(x = population/10^6, y = total, label = abb)) +
+	geom_abline(intercept = log10(r), lty = 2, color = "dark grey") +
+	geom_point(aes(color = region), size = 3) +
+	geom_text_repel() +
+	scale_x_log10() +
+	scale_y_log10() +
+	xlab("Populations in millions (log scale)") +
+	ylab("Total number of murders (log scale)") +
+	ggtitle("US Gun Murders in 2010") +
+	scale_color_discrete(name = "Region") +
+	theme_economist()
+```
+
+
+
+
+
+
+
+
+
+

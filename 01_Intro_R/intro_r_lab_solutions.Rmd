@@ -1,0 +1,83 @@
+---
+title: 'Lab Solutions: R Bootcamp'
+output: html_document
+---
+
+As you have seen in lecture, we’ll be using RMarkdown files almost exclusively. There are several options when creating a new file in RStudio, but I find that RMarkdown files are the best when starting out. One of the reasons being that you can have both nice-looking text (regular, markdown, latex) and code in the same document. This is especially convenient for collaborating with others and making your work as reproducible as possible.
+
+Let's get more comfortable writing R code and documenting our results by using the `murders` dataset from `dslabs`. Be sure to include text answers where appropriate. 
+
+```{r}
+library(dslabs)
+data(murders)
+```
+
+
+1. Compute the per 100,000 murder rate for each state and store it in an object called `murder_rate`. Then use the logical operators to create a logical vector named `low` that tells us which entries of `murder_rate` are lower than 1. 
+
+**Solution:**
+
+```{r}
+murder_rate <- murders$total / murders$population * 100000 
+low <- murder_rate < 1
+low
+```
+
+
+2. Now use the results from the previous exercise and the function `which` to determine the indices of `murder_rate` associated with values lower than 1.
+
+**Solution:**
+
+```{r}
+ind <- which(murder_rate < 1)
+ind
+```
+
+
+3. Use the results from the previous exercise to report the names of the states with murder rates lower than 1.
+
+**Solution:**
+
+```{r}
+murders$state[ind]
+```
+
+
+4. Now extend the code from exercises 2 and 3 to report the states in the Northeast with murder rates lower than 1. Hint: Use the previously defined logical vector `low` and the logical operator `&`.
+
+**Solution:**
+
+```{r}
+northeast <- murders$region == "Northeast"
+ind <- low & northeast
+murders$state[ind]
+```
+
+
+5. Use the `%in%` operator to create a logical vector that answers the question: which of the following are actual abbreviations: MA, ME, MI, MO, MU?
+
+**Solution:**
+
+```{r}
+c("MA", "ME", "MI", "MO", "MU") %in% murders$abb
+```
+
+
+6. The function `nchar` tells you how many characters long a character vector is. For example:
+    
+    ```{r}
+    char_len <- nchar(murders$state)
+    char_len[1:5]
+    ```
+
+   Write a line of code that assigns to the object `new_names` the state abbreviation when the state name is longer than 8 characters.
+
+**Solution:**
+
+```{r}
+new_names <- ifelse(nchar(murders$state) > 8,
+                    murders$abb,
+                    murders$state)
+new_names
+```   
+
